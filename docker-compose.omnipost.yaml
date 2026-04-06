@@ -37,7 +37,7 @@ services:
     image: temporalio/auto-setup:latest
     container_name: omnipost-temporal
     environment:
-      DB: postgresql
+      DB: postgres12
       DB_PORT: 5432
       POSTGRES_USER: omnipost
       POSTGRES_PWD: ${POSTGRES_PASSWORD:-omnipost_secure_2026}
