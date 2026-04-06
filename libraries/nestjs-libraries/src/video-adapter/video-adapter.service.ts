@@ -3,7 +3,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import { AdaptationRequest, AdaptationResult, VideoMetadata } from './video-adapter.types';
+import { AdaptationRequest, AdaptationResult, VideoMetadata, PlatformVideoSpec } from './video-adapter.types';
 import { PLATFORM_SPECS } from './platform-specs';
 import { probeVideo, buildFfmpegCommand, generateThumbnail } from './ffmpeg.utils';
 
