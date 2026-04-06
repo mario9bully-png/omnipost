@@ -36,6 +36,10 @@ import { MoltbookProvider } from '@gitroom/nestjs-libraries/integrations/social/
 import { SkoolProvider } from '@gitroom/nestjs-libraries/integrations/social/skool.provider';
 import { WhopProvider } from '@gitroom/nestjs-libraries/integrations/social/whop.provider';
 import { MeweProvider } from '@gitroom/nestjs-libraries/integrations/social/mewe.provider';
+import { RutubeProvider } from '@gitroom/nestjs-libraries/integrations/social/rutube.provider';
+import { DzenProvider } from '@gitroom/nestjs-libraries/integrations/social/dzen.provider';
+import { OkProvider } from '@gitroom/nestjs-libraries/integrations/social/ok.provider';
+import { YappyProvider } from '@gitroom/nestjs-libraries/integrations/social/yappy.provider';
 
 export const socialIntegrationList: Array<SocialAbstract & SocialProvider> = [
   new XProvider(),
@@ -71,7 +75,10 @@ export const socialIntegrationList: Array<SocialAbstract & SocialProvider> = [
   new WhopProvider(),
   new SkoolProvider(),
   new MeweProvider(),
-  // new MastodonCustomProvider(),
+  new RutubeProvider(),
+  new DzenProvider(),
+  new OkProvider(),
+  new YappyProvider(),
 ];
 
 @Injectable()

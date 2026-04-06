@@ -1,0 +1,45 @@
+tiers:
+  start:
+    name: "Старт"
+    features:
+      platforms: true
+      scheduling: true
+      monitoring: true
+      videoAdapter: false
+      thumbnailGeneration: false
+      aiContent: false
+      advancedAnalytics: false
+    limits:
+      maxPostsPerMonth: 100
+      maxAccounts: 10
+      storageLimitMb: 5120
+
+  standard:
+    name: "Стандарт"
+    features:
+      platforms: true
+      scheduling: true
+      monitoring: true
+      videoAdapter: true
+      thumbnailGeneration: true
+      aiContent: false
+      advancedAnalytics: false
+    limits:
+      maxPostsPerMonth: 500
+      maxAccounts: 30
+      storageLimitMb: 20480
+
+  full:
+    name: "Полный"
+    features:
+      platforms: true
+      scheduling: true
+      monitoring: true
+      videoAdapter: true
+      thumbnailGeneration: true
+      aiContent: true
+      advancedAnalytics: true
+    limits:
+      maxPostsPerMonth: -1
+      maxAccounts: -1
+      storageLimitMb: 102400

@@ -17,6 +17,11 @@ import { TemporalRegisterMissingSearchAttributesModule } from '@gitroom/nestjs-l
 import { InfiniteWorkflowRegisterModule } from '@gitroom/nestjs-libraries/temporal/infinite.workflow.register';
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { ioRedis } from '@gitroom/nestjs-libraries/redis/redis.service';
+import { VideoAdapterModule } from '@gitroom/nestjs-libraries/video-adapter/video-adapter.module';
+import { AiContentModule } from '@gitroom/nestjs-libraries/ai-content/ai-content.module';
+import { BillingModule } from '@gitroom/nestjs-libraries/billing/billing.module';
+import { MonitoringModule } from '@gitroom/nestjs-libraries/monitoring/monitoring.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Global()
 @Module({
@@ -32,6 +37,11 @@ import { ioRedis } from '@gitroom/nestjs-libraries/redis/redis.service';
     getTemporalModule(false),
     TemporalRegisterMissingSearchAttributesModule,
     InfiniteWorkflowRegisterModule,
+    ScheduleModule.forRoot(),
+    VideoAdapterModule,
+    AiContentModule,
+    BillingModule,
+    MonitoringModule,
     ThrottlerModule.forRoot({
       throttlers: [
         {
