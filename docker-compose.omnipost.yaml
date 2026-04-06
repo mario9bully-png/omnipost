@@ -51,7 +51,10 @@ services:
       - omnipost-net
 
   app:
-    image: ghcr.io/gitroomhq/postiz-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.omnipost
+    image: omnipost-app:latest
     container_name: omnipost-app
     env_file: .env
     ports:
