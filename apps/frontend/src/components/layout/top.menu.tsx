@@ -248,7 +248,7 @@ export const useMenuItem = () => {
           />
         </svg>
       ),
-      path: 'https://affiliate.postiz.com',
+      path: 'https://affiliate.omnipost.app',
       role: ['ADMIN', 'SUPERADMIN', 'USER'],
       requireBilling: true,
     },
