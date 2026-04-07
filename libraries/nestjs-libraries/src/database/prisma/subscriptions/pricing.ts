@@ -40,8 +40,8 @@ export const pricing: PricingInterface = {
   },
   STANDARD: {
     current: 'STANDARD',
-    month_price: 990,
-    year_price: 9500,
+    month_price: 1880,
+    year_price: 18050,
     channel: 5,
     posts_per_month: 300,
     image_generation_count: 10,
@@ -58,8 +58,8 @@ export const pricing: PricingInterface = {
   },
   PRO: {
     current: 'PRO',
-    month_price: 2490,
-    year_price: 23900,
+    month_price: 4730,
+    year_price: 45410,
     channel: 15,
     posts_per_month: 1000000,
     image_generation_count: 100,
@@ -76,8 +76,8 @@ export const pricing: PricingInterface = {
   },
   BUSINESS: {
     current: 'BUSINESS',
-    month_price: 4990,
-    year_price: 47900,
+    month_price: 9480,
+    year_price: 91010,
     channel: 50,
     posts_per_month: 1000000,
     image_generation_count: 500,
