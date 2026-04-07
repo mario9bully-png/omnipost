@@ -25,6 +25,7 @@ import { RootController } from '@gitroom/backend/api/routes/root.controller';
 import { TrackService } from '@gitroom/nestjs-libraries/track/track.service';
 import { ShortLinkService } from '@gitroom/nestjs-libraries/short-linking/short.link.service';
 import { Nowpayments } from '@gitroom/nestjs-libraries/crypto/nowpayments';
+import { TPayService } from '@gitroom/nestjs-libraries/billing/tpay.service';
 import { WebhookController } from '@gitroom/backend/api/routes/webhooks.controller';
 import { SignatureController } from '@gitroom/backend/api/routes/signature.controller';
 import { AutopostController } from '@gitroom/backend/api/routes/autopost.controller';
@@ -90,6 +91,7 @@ const authenticatedController = [
     TrackService,
     ShortLinkService,
     Nowpayments,
+    TPayService,
     AuthProviderManager,
     GithubProvider,
     GoogleProvider,

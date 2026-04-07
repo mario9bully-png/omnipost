@@ -26,7 +26,7 @@ export class OrganizationRepository {
         subscription: {
           create: {
             totalChannels: 1000000,
-            subscriptionTier: 'ULTIMATE',
+            subscriptionTier: 'BUSINESS',
             isLifetime: true,
             period: 'YEARLY',
           },

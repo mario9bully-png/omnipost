@@ -25,18 +25,58 @@ export class TPayWebhookController {
     }
 
     if (notification.Status === 'CONFIRMED' && notification.Success) {
-      // OrderId format: org_{orgId}_tier_{tierName}_{timestamp}
+      // OrderId format: org_{orgId}_tier_{tierName}_period_{period}_{timestamp}
       const parts = notification.OrderId.split('_');
       const orgId = parts[1];
-      const tier = parts[3];
+      const tier = parts[3] as 'STANDARD' | 'PRO' | 'BUSINESS';
+      const period = (parts[5] || 'MONTHLY') as 'MONTHLY' | 'YEARLY';
 
-      if (orgId && tier) {
-        this.logger.log(`Upgrading org ${orgId} to tier ${tier}`);
-        await this.prisma.organization.update({
-          where: { id: orgId },
-          data: { tier },
-        });
+      if (!orgId || !tier) {
+        this.logger.error(`Invalid OrderId format: ${notification.OrderId}`);
+        return 'OK';
       }
+
+      const channelLimits: Record<string, number> = {
+        STANDARD: 5,
+        PRO: 15,
+        BUSINESS: 50,
+      };
+
+      const totalChannels = channelLimits[tier] || 5;
+
+      this.logger.log(
+        `Upgrading org ${orgId} to tier ${tier} (${period}), channels: ${totalChannels}`
+      );
+
+      // Upsert subscription record
+      await this.prisma.subscription.upsert({
+        where: { organizationId: orgId },
+        create: {
+          organizationId: orgId,
+          subscriptionTier: tier,
+          identifier: `tpay_${notification.PaymentId}`,
+          totalChannels,
+          period,
+          isLifetime: false,
+        },
+        update: {
+          subscriptionTier: tier,
+          identifier: `tpay_${notification.PaymentId}`,
+          totalChannels,
+          period,
+          cancelAt: null,
+          deletedAt: null,
+        },
+      });
+
+      // Update org tier and trailing status
+      await this.prisma.organization.update({
+        where: { id: orgId },
+        data: {
+          tier,
+          isTrailing: false,
+        },
+      });
     }
 
     return 'OK';

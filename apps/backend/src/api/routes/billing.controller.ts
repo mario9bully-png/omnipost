@@ -10,6 +10,8 @@ import { NotificationService } from '@gitroom/nestjs-libraries/database/prisma/n
 import { Request } from 'express';
 import { Nowpayments } from '@gitroom/nestjs-libraries/crypto/nowpayments';
 import { AuthService } from '@gitroom/helpers/auth/auth.service';
+import { TPayService } from '@gitroom/nestjs-libraries/billing/tpay.service';
+import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/pricing';
 
 @ApiTags('Billing')
 @Controller('/billing')
@@ -18,7 +20,8 @@ export class BillingController {
     private _subscriptionService: SubscriptionService,
     private _stripeService: StripeService,
     private _notificationService: NotificationService,
-    private _nowpayments: Nowpayments
+    private _nowpayments: Nowpayments,
+    private _tpayService: TPayService
   ) {}
 
   @Get('/check/:id')
@@ -201,5 +204,66 @@ export class BillingController {
   @Get('/crypto')
   async crypto(@GetOrgFromRequest() org: Organization) {
     return this._nowpayments.createPaymentPage(org.id);
+  }
+
+  @Get('/tiers')
+  async getTiers() {
+    return Object.entries(pricing).map(([key, value]) => ({
+      id: key,
+      name: key,
+      month_price: value.month_price,
+      year_price: value.year_price,
+      channel: value.channel,
+      posts_per_month: value.posts_per_month,
+      team_members: value.team_members,
+      ai: value.ai,
+      image_generation_count: value.image_generation_count,
+      generate_videos: value.generate_videos,
+      webhooks: value.webhooks,
+      autoPost: value.autoPost,
+      public_api: value.public_api,
+    }));
+  }
+
+  @Post('/tpay/create')
+  async createTPayPayment(
+    @GetOrgFromRequest() org: Organization,
+    @Body() body: { tier: string; period: string }
+  ) {
+    const tier = body.tier as keyof typeof pricing;
+    const period = body.period || 'MONTHLY';
+
+    if (!pricing[tier] || tier === 'FREE') {
+      throw new HttpException('Invalid tier', 400);
+    }
+
+    const tierData = pricing[tier];
+    const amount = period === 'YEARLY' ? tierData.year_price : tierData.month_price;
+    const frontendUrl = process.env.FRONTEND_URL || 'https://omnipost.xn--80aaa1admdj1blvg.xn--p1ai';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || frontendUrl + '/api';
+
+    const orderId = `org_${org.id}_tier_${tier}_period_${period}_${Date.now()}`;
+
+    const periodLabel = period === 'YEARLY' ? 'год' : 'месяц';
+    const tierNames: Record<string, string> = {
+      STANDARD: 'Стандарт',
+      PRO: 'Про',
+      BUSINESS: 'Бизнес',
+    };
+
+    const result = await this._tpayService.createPayment({
+      orderId,
+      amount: amount * 100, // T-Pay uses kopecks
+      description: `OmniPost тариф "${tierNames[tier] || tier}" (${periodLabel})`,
+      customerKey: org.id,
+      successUrl: `${frontendUrl}/launches?msg=Подписка+активирована`,
+      failUrl: `${frontendUrl}/billing?msg=Оплата+не+прошла`,
+      notificationUrl: `${backendUrl}/billing/webhook/tpay`,
+    });
+
+    return {
+      paymentUrl: result.PaymentURL,
+      paymentId: result.PaymentId,
+    };
   }
 }

@@ -155,7 +155,7 @@ export class PublicController {
     try {
       const load = AuthService.verifyJWT(params) as {
         orgId: string;
-        billing: 'FREE' | 'STANDARD' | 'TEAM' | 'PRO' | 'ULTIMATE';
+        billing: 'FREE' | 'STANDARD' | 'PRO' | 'BUSINESS';
       };
 
       if (!load || !load.orgId || !load.billing || !pricing[load.billing]) {

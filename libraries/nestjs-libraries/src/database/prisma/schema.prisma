@@ -913,8 +913,7 @@ enum State {
 enum SubscriptionTier {
   STANDARD
   PRO
-  TEAM
-  ULTIMATE
+  BUSINESS
 }
 
 enum Period {
