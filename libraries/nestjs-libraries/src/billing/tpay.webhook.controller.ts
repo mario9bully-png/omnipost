@@ -1,7 +1,7 @@
-import { Controller, Post, Body, Logger, HttpCode, Inject } from '@nestjs/common';
+import { Controller, Post, Body, Logger, HttpCode } from '@nestjs/common';
 import { TPayService } from './tpay.service';
 import { TPayNotification } from './tpay.types';
-import { PrismaRepository } from '@gitroom/nestjs-libraries/database/prisma/prisma.service';
+import { PrismaService } from '@gitroom/nestjs-libraries/database/prisma/prisma.service';
 
 @Controller('billing/webhook')
 export class TPayWebhookController {
@@ -9,7 +9,7 @@ export class TPayWebhookController {
 
   constructor(
     private readonly tpayService: TPayService,
-    private readonly prisma: PrismaRepository
+    private readonly prisma: PrismaService
   ) {}
 
   @Post('tpay')
